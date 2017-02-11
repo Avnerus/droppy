@@ -1,5 +1,5 @@
-FROM mhart/alpine-node:latest
-MAINTAINER silverwind
+FROM resin/odroid-ux3-alpine-node:4-slim
+MAINTAINER avnerus
 
 # Install and build modules
 RUN apk add --update-cache --no-cache --virtual deps curl make gcc g++ python git && \
@@ -10,6 +10,8 @@ RUN apk add --update-cache --no-cache --virtual deps curl make gcc g++ python gi
   ln -s /opt/yarn/bin/yarn /usr/local/bin && \
   # install global modules
   yarn global add droppy@latest dmn@latest --production && \
+  # add droppy symlink
+  ln -s /usr/local/share/.config/yarn/global/node_modules/.bin/droppy /usr/bin/droppy && \
   # cleanup node modules
   cd /usr/local/share/.config/yarn/global && \
   dmn clean -f && \

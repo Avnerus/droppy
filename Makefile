@@ -3,9 +3,9 @@
 
 X86 := $(shell uname -m | grep 86)
 ifeq ($(X86),)
-	IMAGE=silverwind/armhf-droppy
+	IMAGE=avnerus/armhf-droppy
 else
-	IMAGE=silverwind/droppy
+	IMAGE=avnerus/droppy
 endif
 
 JQUERY_FLAGS=-ajax,-css,-deprecated,-effects,-event/alias,-event/focusin,-event/trigger,-wrap,-core/ready,-deferred,-exports/amd,-sizzle,-offset,-dimensions,-serialize,-queue,-callbacks,-event/support,-event/ajax,-attributes/prop,-attributes/val,-attributes/attr,-attributes/support,-manipulation/setGlobalEval,-manipulation/support,-manipulation/var/rcheckableType,-manipulation/var/rscriptType
@@ -28,10 +28,10 @@ publish:
 
 docker:
 	@echo Preparing docker image $(IMAGE)...
-	docker pull mhart/alpine-node:latest
+	docker pull resin/odroid-ux3-alpine-node:4-slim
 	docker rm -f "$$(docker ps -a -f='ancestor=$(IMAGE)' -q)" 2>/dev/null || true
 	docker rmi "$$(docker images -qa $(IMAGE))" 2>/dev/null || true
-	docker build --no-cache=true --squash  -t $(IMAGE) .
+	docker build --no-cache=true -t $(IMAGE) .
 	docker tag "$$(docker images -qa $(IMAGE):latest)" $(IMAGE):"$$(cat package.json | jq -r .version)"
 
 docker-push:
